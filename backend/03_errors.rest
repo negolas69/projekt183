@@ -1,0 +1,238 @@
+@authUrl = http://localhost:3001/auth/
+@teamUrl = http://localhost:3001/api/teams/
+@todosUrl = http://localhost:3001/api/todos
+
+# Error 401: Kein Zugriff auf Team API ohne Authentisierung 
+POST {{teamUrl}}
+Content-Type: application/json
+
+{
+    "name": "teamUser1"
+}
+
+###
+
+# Error 401: Kein Zugriff auf Todo API ohne Authentisierung 
+POST {{todosUrl}}
+Content-Type: application/json
+
+{
+    "description": "Todo 3",
+    "isDone": false,
+    "responsible": "toptoptoptop",
+    "team": "toptoptoptop"
+}
+
+###
+
+# Error 401: Kein Logout ohne Authentisierung 
+POST {{authUrl}}/logout
+
+###
+
+# Login user1
+# @name loginUser1
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user1@todos.ch",
+    "password": "user1"
+}
+
+###
+
+# Team von user1 erstellen
+@cookieUser1 = {{loginUser1.response.headers.Set-Cookie}}
+# @name createTeamUser1
+POST {{teamUrl}}
+Content-Type: application/json
+Cookie: {{cookieUser1}}
+
+{
+    "name": "teamUser1.2"
+}
+
+###
+
+# Error 400: Nicht existierender User kann man Team nicht hinzufügen
+@teamUser1Id = {{createTeamUser1.response.body.$._id}}
+@user1Id ={{createTeamUser1.response.body.$.admins[0]._id}}
+POST {{teamUrl}}/{{teamUser1Id}}/members
+Content-Type: application/json
+Cookie: {{cookieUser1}}
+
+{
+    "username": "noUser@todos.ch"
+}
+
+###
+
+# user2 als Member zu Team von user1 hinzufügen
+POST {{teamUrl}}/{{teamUser1Id}}/members
+Content-Type: application/json
+Cookie: {{cookieUser1}}
+
+{
+    "username": "user2@todos.ch"
+}
+
+###
+
+# Error 400: Anpassung von nicht existierendem Team nicht möglich
+PATCH {{teamUrl}}/toptoptoptop/admins
+Content-Type: application/json
+Cookie: {{cookieUser1}}
+
+{
+    "_id": "toptoptoptop",
+    "isAdmin": false
+}
+
+###
+
+# Logout user1
+POST {{authUrl}}/logout
+
+###
+
+# Login user2
+# @name loginUser2
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user2@todos.ch",
+    "password": "user2"
+}
+
+###
+
+# Error 401: Anpassung an Team für Member nicht möglich
+@cookieUser2 = {{loginUser2.response.headers.Set-Cookie}}
+DELETE {{teamUrl}}/{{teamUser1Id}}/users/{{user1Id}}
+Content-Type: application/json
+Cookie: {{cookieUser2}}
+
+###
+
+# Error 400: Erstellen von Todo für nicht existierendes Team nicht möglich
+POST {{todosUrl}}
+Content-Type: application/json
+Cookie: {{cookieUser2}}
+
+{
+    "description": "Todo 1",
+    "isDone": false,
+    "responsible": "toptoptoptop",
+    "team": "{{teamUser1Id}}"
+}
+
+###
+
+# Error 400: Erstellen von Todo für nicht existierenden User nicht möglich
+POST {{todosUrl}}
+Content-Type: application/json
+Cookie: {{cookieUser2}}
+
+{
+    "description": "Todo 1",
+    "isDone": false,
+    "responsible": "{{user1Id}}",
+    "team": "toptoptoptop"
+}
+
+###
+
+# Logout user2
+POST {{authUrl}}/logout
+
+###
+
+# Login user2
+# @name secondLoginUser1
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user1@todos.ch",
+    "password": "user1"
+}
+
+###
+
+# Todo für user1 erstellen
+@secondCookieUser1 = {{secondLoginUser1.response.headers.Set-Cookie}}
+# @name createdTodoUser1
+POST {{todosUrl}}
+Content-Type: application/json
+Cookie: {{secondCookieUser1}}
+
+{
+    "description": "Todo 1",
+    "isDone": false,
+    "responsible": "{{user1Id}}",
+    "team": "{{teamUser1Id}}"
+}
+
+###
+
+# Logout user1
+POST {{authUrl}}/logout
+
+###
+
+# Login user2
+# @name secondLoginUser2
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user2@todos.ch",
+    "password": "user2"
+}
+
+###
+
+# Error 404: Anpassung von Todo von anderem User für Nicht-Admin nicht möglich
+@secondCookieUser2 = {{secondLoginUser2.response.headers.Set-Cookie}}
+@todoIdUser1 = {{createdTodoUser1.response.body.$._id}}
+PUT {{todosUrl}}/{{todoIdUser1}}
+Content-Type: application/json
+Cookie: {{secondCookieUser2}}
+
+{
+    "description": "Todo 2",
+    "isDone": true,
+    "responsible": "{{user1Id}}"
+}
+
+###
+
+# Logout user2
+POST {{authUrl}}/logout
+
+###
+
+# Login user1
+# @name thirdLoginUser1
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user1@todos.ch",
+    "password": "user1"
+}
+
+###
+
+# Team von user1 löschen
+@thirdCookieUser1 = {{thirdLoginUser1.response.headers.Set-Cookie}}
+DELETE {{teamUrl}}/{{teamUser1Id}}
+Content-Type: application/json
+Cookie: {{secondCookieUser2}}
+
+###
+
+# Logout user1
+POST {{authUrl}}/logout

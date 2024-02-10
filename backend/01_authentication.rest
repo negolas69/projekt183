@@ -1,0 +1,94 @@
+# URL für auth API
+@authUrl = http://localhost:3001/auth/
+
+# Neuen User user1 registrieren
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+    "email": "user1@todos.ch",
+    "nickname": "user1",
+    "password": "user1"
+}
+
+###
+
+# Neuen User user2 registrieren
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+    "email": "user2@todos.ch",
+    "nickname": "user2",
+    "password": "user2"
+}
+
+###
+
+# Neuen User user3 registrieren
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+    "email": "user3@todos.ch",
+    "nickname": "user3",
+    "password": "user3"
+}
+
+###
+
+# 409 Error: Username (Email) existiert bereits
+POST {{authUrl}}/register
+Content-Type: application/json
+
+{
+    "email": "otherUser@todos.ch",
+    "nickname": "user1",
+    "password": "otherUser"
+}
+
+###
+
+# User Login schlägt fehl: Falsches Passwort
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user1@todos.ch",
+    "password": "xxx"
+}
+
+###
+
+# User Login schlägt fehl: Nicht existierender User
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "otherUser@todos.ch",
+    "password": "otherUser"
+}
+
+###
+
+# User Login für user1 erfolgreich
+# @name loginUser1
+POST {{authUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "user1@todos.ch",
+    "password": "user1"
+}
+
+###
+
+# Eingloggter User holen
+@cookieUser1 = {{loginUser1.response.headers.Set-Cookie}}
+GET {{authUrl}}/me
+Cookie: {{cookieUser1}}
+
+###
+
+# User Logout
+POST {{authUrl}}/logout

@@ -1,0 +1,231 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #003399;
+  box-sizing: border-box;
+}
+
+.container-content {
+  max-width: 60vw;
+  min-width: 768px;
+  margin: 0 auto;
+}
+
+header {
+  position: relative;
+  height: 45px;
+  background-color: #003399;
+  margin-bottom: 40px;
+}
+
+header button {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px;
+  background-color: #66ccff;
+  color: #003399;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+nav ul {
+  list-style-type: none;
+}
+
+nav ul li {
+  display: inline-block;
+  height: 45px;
+  background-color: #003399;
+  color: #66ccff;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 45px;
+}
+
+nav ul li.selected {
+  border-bottom: 3px solid #66ccff;
+}
+
+nav ul li:hover:not(.selected) {
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+nav ul li:not(:last-child) {
+  margin-right: 15px;
+}
+
+.do-not-display {
+  display: none;
+}
+
+h1 {
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+.container-form {
+  width: 30vw;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+
+form {
+  margin-bottom: 25px;
+}
+
+.fit-container {
+  width: 100%;
+}
+
+input {
+  padding: 5px;
+  font-size: 1rem;
+}
+
+.small-font {
+  font-size: 0.9rem;
+}
+
+input:not([type='submit']) {
+  margin-bottom: 5px;
+  background-color: rgb(102, 204, 255, 0.4);
+  border: solid 1px rgb(0, 51, 153, 0.6);
+  border-radius: 0%;
+}
+
+input:not([type='submit']):focus {
+  outline: solid 1px rgb(0, 51, 153, 0.6);
+}
+
+input[type='submit'] {
+  margin: 10px 0;
+}
+
+.btn {
+  color: #66ccff;
+  background-color: #003399;
+  border: none;
+  cursor: pointer;
+}
+
+input[type='submit']:hover {
+  background-color: rgb(0, 51, 153, 0.9);
+}
+
+.error {
+  padding: 5px;
+  color: rgb(255, 0, 0, 0.8);
+  background-color: rgb(255, 0, 0, 0.2);
+}
+
+.link {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.center {
+  margin: auto;
+}
+
+.section-content {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: rgb(102, 204, 255, 0.4);
+  border-radius: 4px;
+}
+
+.section-content .header-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.section-content .header-content * {
+  display: inline-block;
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  line-height: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.btn-rotate {
+  transform: rotate(45deg);
+}
+
+.btn-icon:not(.btn-rotate) {
+  margin: 0 5px 0 10px;
+}
+
+.input-long {
+  width: 25vw;
+}
+
+.section-content .form-content select {
+  background-color: rgb(102, 204, 255, 0.4);
+  color: rgb(0, 51, 153, 0.6);
+  border: solid 1px rgb(0, 51, 153, 0.6);
+  padding: 5px 10px;
+  font-size: 1rem;
+}
+
+.section-content .form-content select:focus {
+  outline: solid 1px rgb(0, 51, 153, 0.6);
+}
+
+.section-content .form-content select.chosen {
+  color: rgb(0, 51, 153);
+}
+
+.section-content ul {
+  list-style-type: none;
+}
+
+.section-content ul li {
+  line-height: 2rem;
+}
+
+.section-content ul li > *:not(.btn):not(.margin-only-left) {
+  margin-right: 5px;
+}
+
+.section-content ul li .done {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.section-content ul li .nickname {
+  background-color: #66ccff;
+  color: #003399;
+  padding: 4px;
+  border-radius: 2px;
+  font-size: small;
+  line-height: 100%;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.margin-left-only {
+  margin-left: 15px;
+  margin-right: 0px;
+}
